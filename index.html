@@ -80,14 +80,13 @@
   .seam img{
     position:absolute; top:50%; left:50%;
     transform:translate(-50%,-50%);
-    width:100vw; max-width:1600px; height:auto;
-    opacity:.5;
+    width:130vw; max-width:none; height:auto;
+    opacity:.06;
     mix-blend-mode:screen;
-    filter:drop-shadow(0 0 24px rgba(226,28,33,.12));
   }
   .seam--flip img{ transform:translate(-50%,-50%) scaleX(-1); }
   @media (max-width:700px){
-    .seam img{ opacity:.32; }
+    .seam img{ width:170vw; opacity:.05; }
   }
 
   h1,h2,h3,.display{
@@ -164,6 +163,10 @@
   .brand{ display:flex; align-items:center; gap:10px; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:20px; letter-spacing:0.03em; }
   .brand .dot{ width:8px; height:8px; border-radius:50%; background:var(--red); box-shadow:0 0 10px var(--red); }
   .brand-logo{ height:30px; width:auto; filter:drop-shadow(0 0 10px rgba(226,28,33,.35)); }
+  nav{
+    position:absolute; left:50%; top:50%;
+    transform:translate(-50%,-50%);
+  }
   nav ul{ display:flex; gap:28px; list-style:none; }
   nav a{
     position:relative;
@@ -193,6 +196,13 @@
       radial-gradient(ellipse 50% 40% at 85% 85%, rgba(255,183,3,.06), transparent 70%),
       var(--void);
   }
+  .hero::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:32vh; min-height:220px;
+    background:linear-gradient(to bottom, transparent, var(--void) 85%);
+    z-index:1; pointer-events:none;
+  }
+
   .hero-lines{
     position:absolute; inset:0; z-index:0; opacity:.35;
     background:
@@ -338,6 +348,7 @@
 
   .scroll-cue{
     position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    z-index:2;
     font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.3em; color:var(--grey-dim);
     display:flex; flex-direction:column; align-items:center; gap:8px;
   }
@@ -649,8 +660,6 @@
   <div class="scroll-cue"><span class="bar"></span>SCROLL</div>
 </section>
 
-<div class="seam"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
-
 <!-- ============ SECTOR 1 — CONTENIDO ============ -->
 <section id="contenido">
   <div class="reveal">
@@ -751,8 +760,6 @@
   </div>
 </section>
 
-<div class="seam"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
-
 <!-- ============ SECTOR 3 — SOBRE ============ -->
 <section id="sobre">
   <div class="about-grid">
@@ -786,7 +793,7 @@
   </div>
 </section>
 
-<div class="seam seam--flip"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
+<div class="seam"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
 
 <!-- ============ PIT LANE — ENLACES ============ -->
 <section id="pitlane">
@@ -842,8 +849,6 @@
     </a>
   </div>
 </section>
-
-<div class="seam"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
 
 <footer>
   <div class="brand"><span class="dot"></span>PITWALL</div>
