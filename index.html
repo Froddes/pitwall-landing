@@ -471,6 +471,26 @@
   .cd-num{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:clamp(26px,4vw,40px); color:var(--chrome); text-shadow:0 0 14px rgba(255,183,3,.45); }
   .cd-label{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--grey); letter-spacing:.15em; margin-top:4px; }
 
+  .session-block{ margin-top:28px; padding-top:22px; border-top:1px solid var(--line); }
+  .session-block-title{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; color:var(--grey);
+    text-transform:uppercase; margin-bottom:14px;
+  }
+  .session-block-title span{ color:var(--grey-dim); font-size:10px; letter-spacing:.08em; text-transform:none; }
+  .session-list{ display:flex; flex-direction:column; }
+  .session-row{
+    display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:10px;
+    padding:9px 2px; border-bottom:1px dashed var(--line);
+    font-size:13px;
+  }
+  .session-row:last-child{ border-bottom:none; }
+  .session-name{ color:var(--chrome); }
+  .session-day{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--grey); text-transform:capitalize; }
+  .session-time{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--amber); text-shadow:0 0 8px rgba(255,183,3,.35); }
+  .session-row.is-race .session-name{ color:var(--red); font-weight:600; }
+  .session-row.is-race .session-time{ color:var(--red); text-shadow:0 0 8px rgba(226,28,33,.4); }
+
   .standings-list{ display:flex; flex-direction:column; gap:2px; }
   .standing-row{
     position:relative;
@@ -741,6 +761,11 @@
         <div class="cd-unit"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Horas</div></div>
         <div class="cd-unit"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Min</div></div>
         <div class="cd-unit"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seg</div></div>
+      </div>
+
+      <div class="session-block">
+        <div class="session-block-title">Horario del fin de semana <span>hora local</span></div>
+        <div class="session-list" id="session-list"></div>
       </div>
     </div>
 
@@ -1022,6 +1047,50 @@
     countdownTimer = setInterval(tick, 1000);
   }
 
+  function formatSessionDay(iso){
+    try{
+      return new Date(iso).toLocaleDateString('es-ES', { weekday:'short', day:'2-digit', month:'short' });
+    } catch(e){ return ''; }
+  }
+  function formatSessionTime(iso){
+    try{
+      return new Date(iso).toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
+    } catch(e){ return '--:--'; }
+  }
+
+  function renderSessions(race){
+    var list = document.getElementById('session-list');
+    if(!list) return;
+    var sessions = [];
+    var map = [
+      ['FirstPractice', 'Libres 1'],
+      ['SecondPractice', 'Libres 2'],
+      ['ThirdPractice', 'Libres 3'],
+      ['SprintQualifying', 'Clasif. Sprint'],
+      ['Sprint', 'Sprint'],
+      ['Qualifying', 'Clasificación']
+    ];
+    map.forEach(function(pair){
+      var key = pair[0], label = pair[1];
+      if(race[key] && race[key].date){
+        sessions.push({ label: label, iso: race[key].date + 'T' + (race[key].time || '00:00:00Z'), isRace:false });
+      }
+    });
+    sessions.push({ label:'Carrera', iso: race.date + 'T' + (race.time || '00:00:00Z'), isRace:true });
+    sessions.sort(function(a,b){ return new Date(a.iso) - new Date(b.iso); });
+
+    list.innerHTML = '';
+    sessions.forEach(function(s){
+      var row = document.createElement('div');
+      row.className = 'session-row' + (s.isRace ? ' is-race' : '');
+      row.innerHTML =
+        '<span class="session-name">' + s.label + '</span>' +
+        '<span class="session-day">' + formatSessionDay(s.iso) + '</span>' +
+        '<span class="session-time">' + formatSessionTime(s.iso) + '</span>';
+      list.appendChild(row);
+    });
+  }
+
   function loadNextRace(){
     fetchJSON(API + '/current/next.json')
       .then(function(data){
@@ -1031,6 +1100,7 @@
         document.getElementById('race-loc').textContent = race.Circuit.circuitName + ' — ' + race.Circuit.Location.locality + ', ' + race.Circuit.Location.country;
         var iso = race.date + 'T' + (race.time || '00:00:00Z');
         startCountdown(iso);
+        renderSessions(race);
       })
       .catch(function(){
         document.getElementById('race-name').textContent = 'Calendario no disponible';
