@@ -89,21 +89,6 @@
     .seam img{ width:170vw; opacity:.05; }
   }
 
-  /* ---------- start-grid scrolling background (from Contenido down) ---------- */
-  #grid-bg{ position:relative; }
-  #grid-bg::before{
-    content:"";
-    position:absolute; inset:0; z-index:0; pointer-events:none;
-    background-image:url('./public/start-grid.png');
-    background-repeat:repeat;
-    background-position:top center;
-    background-size:900px 560px;
-    opacity:.08;
-  }
-  @media (max-width:900px){
-    #grid-bg::before{ background-size:620px 386px; opacity:.06; }
-  }
-
   h1,h2,h3,.display{
     font-family:'Poppins',sans-serif;
     text-transform:uppercase;
@@ -246,11 +231,12 @@
     animation:draw-track 3.6s cubic-bezier(.65,0,.35,1) 0.4s forwards;
   }
   @keyframes draw-track{ to{ stroke-dashoffset:0; } }
-  .hero-track .spark-car{
+  .hero-track .spark{
+    r:3.4;
+    fill:var(--amber);
+    filter:drop-shadow(0 0 6px var(--amber));
     offset-path:path("M -100 420 C 220 120, 420 620, 760 340 S 1300 120, 1500 420 S 1850 700, 2100 380");
-    offset-rotate:auto;
     animation:spark-run 5.5s linear 4s infinite;
-    filter:drop-shadow(0 0 10px rgba(226,28,33,.5)) drop-shadow(0 3px 5px rgba(0,0,0,.45));
     opacity:0;
   }
   @keyframes spark-run{
@@ -667,21 +653,7 @@
       </linearGradient>
     </defs>
     <path d="M -100 420 C 220 120, 420 620, 760 340 S 1300 120, 1500 420 S 1850 700, 2100 380"/>
-    <g class="spark-car">
-      <ellipse cx="-2" cy="26" rx="52" ry="8" fill="#000000" opacity="0.35"/>
-      <rect x="-50" y="-22" width="10" height="44" rx="2" fill="#f2f1ed"/>
-      <rect x="-50" y="-24" width="6" height="6" fill="#f2f1ed"/>
-      <rect x="-50" y="18" width="6" height="6" fill="#f2f1ed"/>
-      <rect x="20" y="-22" width="8" height="12" rx="2" fill="#111114"/>
-      <rect x="20" y="10" width="8" height="12" rx="2" fill="#111114"/>
-      <rect x="-30" y="-22" width="8" height="12" rx="2" fill="#111114"/>
-      <rect x="-30" y="10" width="8" height="12" rx="2" fill="#111114"/>
-      <rect x="-40" y="-16" width="86" height="32" rx="10" fill="#f2f1ed"/>
-      <path d="M 46,-13 L 64,0 L 46,13 Z" fill="#f2f1ed"/>
-      <rect x="-30" y="-6" width="66" height="12" fill="#e21c21"/>
-      <ellipse cx="-2" cy="0" rx="14" ry="8.5" fill="#0a0a0c"/>
-      <circle cx="56" cy="0" r="2.2" fill="#ffb703"/>
-    </g>
+    <circle class="spark"></circle>
   </svg>
 
   <div class="embers" id="embers"></div>
@@ -709,8 +681,6 @@
   <div class="scroll-cue"><span class="bar"></span>SCROLL</div>
 </section>
 
-<div id="grid-bg">
-
 <!-- ============ SECTOR 1 — CONTENIDO ============ -->
 <section id="contenido">
   <div class="reveal">
@@ -719,18 +689,18 @@
     <p class="section-sub">Lo último que ha salido a pista: reels, historias y momentos que definen cada Gran Premio.</p>
   </div>
 
-  <div class="content-grid">
+  <div class="content-grid" id="content-grid">
     <a class="clip reveal" href="https://www.instagram.com/pitwall_es/" target="_blank" rel="noopener">
       <span class="clip-rec">REC</span><span class="clip-play"><svg viewBox="0 0 12 12"><path d="M1 0l10 6-10 6z"/></svg></span>
       <div class="clip-text">
-        <div class="clip-kicker">Historia</div>
+        <div class="clip-kicker">Reel</div>
         <div class="clip-title">Porque el ruido, contigo, desaparece</div>
       </div>
     </a>
     <a class="clip reveal" href="https://www.instagram.com/pitwall_es/" target="_blank" rel="noopener">
       <span class="clip-rec">REC</span><span class="clip-play"><svg viewBox="0 0 12 12"><path d="M1 0l10 6-10 6z"/></svg></span>
       <div class="clip-text">
-        <div class="clip-kicker">Curiosidad</div>
+        <div class="clip-kicker">Reel</div>
         <div class="clip-title">Todos tenemos una odisea</div>
       </div>
     </a>
@@ -744,14 +714,14 @@
     <a class="clip reveal" href="https://www.instagram.com/pitwall_es/" target="_blank" rel="noopener">
       <span class="clip-rec">REC</span><span class="clip-play"><svg viewBox="0 0 12 12"><path d="M1 0l10 6-10 6z"/></svg></span>
       <div class="clip-text">
-        <div class="clip-kicker">Noticia</div>
+        <div class="clip-kicker">Reel</div>
         <div class="clip-title">Gracias por aparecer cuando más te necesitaba</div>
       </div>
     </a>
     <a class="clip reveal" href="https://www.instagram.com/pitwall_es/" target="_blank" rel="noopener">
       <span class="clip-rec">REC</span><span class="clip-play"><svg viewBox="0 0 12 12"><path d="M1 0l10 6-10 6z"/></svg></span>
       <div class="clip-text">
-        <div class="clip-kicker">Historia</div>
+        <div class="clip-kicker">Reel</div>
         <div class="clip-title">Lo confieso: nunca me enamoré de la velocidad</div>
       </div>
     </a>
@@ -802,23 +772,23 @@
       <span class="link-arrow">→</span>
     </a>
 
-    <a class="link-card reveal" href="mailto:contacto.alfonsorod@gmail.com">
+    <a class="link-card reveal" href="https://www.youtube.com/@pitwall_es" target="_blank" rel="noopener">
       <div class="link-left">
-        <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg></span>
+        <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M21.6 7.2c-.25-1.1-1.1-1.95-2.2-2.2C17.5 4.5 12 4.5 12 4.5s-5.5 0-7.4.5c-1.1.25-1.95 1.1-2.2 2.2C2 9.1 2 12 2 12s0 2.9.4 4.8c.25 1.1 1.1 1.95 2.2 2.2 1.9.5 7.4.5 7.4.5s5.5 0 7.4-.5c1.1-.25 1.95-1.1 2.2-2.2.4-1.9.4-4.8.4-4.8s0-2.9-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/></svg></span>
         <div>
-          <div class="link-name">Contacto</div>
-          <div class="link-sub">contacto.alfonsorod@gmail.com</div>
+          <div class="link-name">YouTube</div>
+          <div class="link-sub">@pitwall_es</div>
         </div>
       </div>
       <span class="link-arrow">→</span>
     </a>
 
-    <a class="link-card reveal" href="#contenido">
+    <a class="link-card reveal" href="https://x.com/alfonsorod22" target="_blank" rel="noopener">
       <div class="link-left">
-        <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+        <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7.1l-5.5-7.2L4.3 22H1.2l8.1-9.3L1 2h7.3l5 6.6L18.9 2zm-1.2 18h1.9L7.4 4H5.4l12.3 16z"/></svg></span>
         <div>
-          <div class="link-name">Ver contenido</div>
-          <div class="link-sub">Últimos reels e historias</div>
+          <div class="link-name">X (Twitter)</div>
+          <div class="link-sub">@alfonsorod22</div>
         </div>
       </div>
       <span class="link-arrow">→</span>
@@ -910,8 +880,6 @@
   <div class="brand"><span class="dot"></span>PITWALL</div>
   <p>© 2026 PITWALL — HECHO CON PASIÓN POR EL MOTORSPORT</p>
 </footer>
-
-</div><!-- /#grid-bg -->
 
 <script>
 (function(){
@@ -1005,8 +973,11 @@
   onScroll();
 
   /* ---------- CARD 3D TILT ---------- */
-  if(window.matchMedia('(pointer:fine)').matches && !prefersReduced){
+  function bindCardTilt(){
+    if(!(window.matchMedia('(pointer:fine)').matches) || prefersReduced) return;
     document.querySelectorAll('.clip').forEach(function(card){
+      if(card.dataset.tiltBound) return;
+      card.dataset.tiltBound = '1';
       card.addEventListener('mousemove', function(ev){
         var rect = card.getBoundingClientRect();
         var x = (ev.clientX - rect.left) / rect.width - 0.5;
@@ -1018,6 +989,63 @@
       });
     });
   }
+  bindCardTilt();
+
+  /* ---------- LIVE REELS FEED (optional) ----------
+     Set REELS_FEED_URL to a webhook that returns JSON:
+     [{ "caption": "...", "kicker": "Reel", "url": "https://www.instagram.com/reel/XXXX/", "thumbnail": "https://..." }, ...]
+     A n8n workflow (schedule trigger -> Instagram Graph API -> respond via Webhook node)
+     is a natural fit here since new-reel detection needs polling or a webhook on
+     Instagram's side, which a static HTML file can't do by itself.
+     Left empty, the page keeps the static cards already in the HTML. */
+  var REELS_FEED_URL = '';
+
+  function renderReels(items){
+    var grid = document.getElementById('content-grid');
+    if(!grid || !items || !items.length) return;
+    grid.innerHTML = '';
+    items.slice(0,6).forEach(function(item){
+      var a = document.createElement('a');
+      a.className = 'clip reveal in';
+      a.href = item.url || 'https://www.instagram.com/pitwall_es/';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      if(item.thumbnail){
+        a.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0) 40%, rgba(0,0,0,.85) 100%), url("' + item.thumbnail + '")';
+        a.style.backgroundSize = 'cover';
+        a.style.backgroundPosition = 'center';
+      }
+      var rec = document.createElement('span');
+      rec.className = 'clip-rec';
+      rec.textContent = 'REC';
+      var play = document.createElement('span');
+      play.className = 'clip-play';
+      play.innerHTML = '<svg viewBox="0 0 12 12"><path d="M1 0l10 6-10 6z"/></svg>';
+      var text = document.createElement('div');
+      text.className = 'clip-text';
+      var kicker = document.createElement('div');
+      kicker.className = 'clip-kicker';
+      kicker.textContent = item.kicker || 'Reel';
+      var title = document.createElement('div');
+      title.className = 'clip-title';
+      title.textContent = item.caption || '';
+      text.appendChild(kicker);
+      text.appendChild(title);
+      a.appendChild(rec);
+      a.appendChild(play);
+      a.appendChild(text);
+      grid.appendChild(a);
+    });
+    bindCardTilt();
+  }
+
+  function loadReels(){
+    if(!REELS_FEED_URL) return;
+    fetchJSON(REELS_FEED_URL).then(renderReels).catch(function(){
+      /* feed unreachable: static cards already in the HTML stay as-is */
+    });
+  }
+  loadReels();
 
   /* ---------- ABOUT GAUGE REVEAL ---------- */
   var aboutVisual = document.getElementById('about-visual');
