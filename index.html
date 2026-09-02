@@ -71,6 +71,7 @@
     background-size:200% 100%;
     box-shadow:0 0 12px rgba(226,28,33,.7);
     transition:width .08s linear;
+    pointer-events:none;
   }
 
   /* ---------- finish-line seam (crossing between sections) ---------- */
@@ -183,6 +184,35 @@
   nav a:focus-visible{ outline:2px solid var(--amber); outline-offset:4px; }
   @media (max-width:760px){ nav ul{ display:none; } }
 
+  .nav-toggle{
+    display:none; flex-direction:column; justify-content:center; gap:4px;
+    width:26px; height:26px; background:none; border:none; cursor:pointer;
+    position:relative; z-index:600; padding:0;
+  }
+  .nav-toggle span{
+    display:block; width:100%; height:1.5px; background:var(--chrome); border-radius:2px;
+    transition:transform .25s ease, opacity .2s ease;
+  }
+  .nav-toggle.open span:nth-child(1){ transform:translateY(5.5px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ transform:translateY(-5.5px) rotate(-45deg); }
+  @media (max-width:760px){ .nav-toggle{ display:flex; } }
+
+  .mobile-nav{
+    position:fixed; inset:0; z-index:480;
+    background:rgba(8,8,10,.98);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transform:translateY(-10px);
+    transition:opacity .3s ease, visibility .3s ease, transform .3s ease;
+  }
+  .mobile-nav.open{ opacity:1; visibility:visible; transform:translateY(0); }
+  .mobile-nav ul{ list-style:none; display:flex; flex-direction:column; gap:20px; text-align:center; }
+  .mobile-nav a{
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:17px;
+    text-transform:uppercase; letter-spacing:.03em; color:var(--chrome);
+  }
+  .mobile-nav a:active{ color:var(--red); }
+
   /* ============ HERO ============ */
   .hero{
     position:relative;
@@ -195,6 +225,9 @@
       radial-gradient(ellipse 60% 50% at 50% 0%, rgba(226,28,33,.16), transparent 70%),
       radial-gradient(ellipse 50% 40% at 85% 85%, rgba(255,183,3,.06), transparent 70%),
       var(--void);
+  }
+  @media (max-width:480px){
+    .hero{ padding:100px 6vw 48px; }
   }
   .hero::after{
     content:"";
@@ -358,6 +391,8 @@
 
   /* ============ SECTION SHELL ============ */
   section{ position:relative; padding:120px 6vw; max-width:1180px; margin:0 auto; z-index:2; }
+  @media (max-width:760px){ section{ padding:80px 6vw; } }
+  @media (max-width:480px){ section{ padding:64px 6vw; } }
   .eyebrow{
     display:inline-flex; align-items:center; gap:8px;
     font-family:'Times New Roman', Times, serif; font-style:italic; font-size:15px; letter-spacing:.04em;
@@ -383,7 +418,7 @@
     gap:18px;
   }
   @media (max-width:900px){ .content-grid{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:600px){ .content-grid{ grid-template-columns:1fr; } }
+  @media (max-width:480px){ .content-grid{ gap:10px; } }
 
   .clip{
     position:relative;
@@ -432,18 +467,19 @@
   .clip-kicker::before{ content:""; width:14px; height:2px; background:var(--amber); }
   .clip-title{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; margin-top:8px; line-height:1.15; text-transform:none; }
   .clip:hover{ border-color:var(--red); transform:translateY(-6px) rotateX(2deg); box-shadow:0 0 0 1px rgba(226,28,33,.5), 0 20px 45px rgba(226,28,33,.22); }
+  @media (max-width:480px){
+    .clip-text{ padding:12px; }
+    .clip-title{ font-size:14px; margin-top:5px; }
+    .clip-kicker{ font-size:8px; gap:5px; }
+    .clip-kicker::before{ width:10px; }
+    .clip-rec{ font-size:8px; padding:3px 6px; top:8px; left:8px; }
+    .clip-play{ width:24px; height:24px; top:8px; right:8px; }
+    .clip-play svg{ width:9px; height:9px; }
+  }
 
   .content-more{ margin-top:34px; text-align:center; }
 
-  /* ============ TIMING TOWER (Sector 2) ============ */
-  .tower-wrap{
-    margin-top:56px;
-    display:grid;
-    grid-template-columns:1.1fr 1fr;
-    gap:20px;
-  }
-  @media (max-width:860px){ .tower-wrap{ grid-template-columns:1fr; } }
-
+  /* ============ NEWSLETTER (Sector 2) ============ */
   .panel{
     position:relative;
     background:linear-gradient(160deg, var(--panel-2), var(--panel));
@@ -458,64 +494,59 @@
     animation:sweep-line 4s linear infinite;
   }
   @keyframes sweep-line{ to{ left:100%; } }
-  .panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
-  .panel-head h3{ font-size:16px; color:var(--grey); letter-spacing:.1em; }
-  .live-dot{ display:inline-flex; align-items:center; gap:6px; font-family:'Poppins',sans-serif; font-weight:600; font-size:10px; color:var(--amber); letter-spacing:.15em; }
-  .live-dot::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber); animation:blink 1.4s infinite; }
   @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
 
-  .race-name{ font-size:clamp(19px,2.4vw,25px); margin-bottom:4px; }
-  .race-loc{ color:var(--grey); font-size:14px; margin-bottom:26px; }
-
-  .countdown{ display:flex; gap:14px; }
-  .cd-unit{ flex:1; text-align:center; background:rgba(0,0,0,.25); border:1px solid var(--line); border-radius:6px; padding:10px 4px; }
-  .cd-num{ font-family:'Poppins',sans-serif; font-weight:700; font-size:clamp(26px,4vw,40px); color:var(--chrome); text-shadow:0 0 14px rgba(255,183,3,.45); }
-  .cd-label{ font-family:'Poppins',sans-serif; font-size:10px; color:var(--grey); letter-spacing:.15em; margin-top:4px; }
-
-  .session-block{ margin-top:28px; padding-top:22px; border-top:1px solid var(--line); }
-  .session-block-title{
-    display:flex; align-items:baseline; justify-content:space-between;
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:11px; letter-spacing:.05em; color:var(--grey);
-    text-transform:uppercase; margin-bottom:14px;
+  .newsletter-panel{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:190px 1fr;
+    align-items:center;
+    gap:40px;
+    padding:44px;
   }
-  .session-block-title span{ color:var(--grey-dim); font-size:10px; letter-spacing:.08em; text-transform:none; }
-  .session-list{ display:flex; flex-direction:column; }
-  .session-row{
-    display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:10px;
-    padding:9px 2px; border-bottom:1px dashed var(--line);
-    font-size:13px;
+  @media (max-width:760px){
+    .newsletter-panel{ grid-template-columns:1fr; padding:32px 24px; text-align:center; gap:24px; }
   }
-  .session-row:last-child{ border-bottom:none; }
-  .session-name{ color:var(--chrome); }
-  .session-day{ font-family:'Poppins',sans-serif; font-size:11px; color:var(--grey); text-transform:capitalize; }
-  .session-time{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; color:var(--amber); text-shadow:0 0 8px rgba(255,183,3,.35); }
-  .session-row.is-race .session-name{ color:var(--red); font-weight:600; }
-  .session-row.is-race .session-time{ color:var(--red); text-shadow:0 0 8px rgba(226,28,33,.4); }
-
-  .standings-list{ display:flex; flex-direction:column; gap:2px; }
-  .standing-row{
-    position:relative;
-    display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:12px;
-    padding:12px 10px; border-bottom:1px solid var(--line);
-    border-left:2px solid transparent;
-    transition:border-color .2s ease, background .2s ease;
+  .newsletter-visual{
+    width:100%; aspect-ratio:1/1;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(226,28,33,.3), transparent 60%),
+      linear-gradient(160deg, var(--panel-2), var(--void));
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
   }
-  .standing-row:hover{ background:rgba(255,255,255,.03); border-left-color:var(--red); }
-  .standing-row:nth-child(odd){ background:rgba(255,255,255,.015); }
-  .standing-row:last-child{ border-bottom:none; }
-  .pos{ font-family:'Poppins',sans-serif; color:var(--red); font-weight:700; text-shadow:0 0 8px rgba(226,28,33,.5); }
-  .std-name{ font-size:14px; }
-  .std-team{ font-size:11px; color:var(--grey); }
-  .std-pts{ font-family:'Poppins',sans-serif; font-weight:600; font-size:14px; color:var(--amber); text-shadow:0 0 8px rgba(255,183,3,.4); }
-  .toggle-row{ display:flex; gap:8px; margin-bottom:16px; }
-  .toggle-btn{
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:11px; letter-spacing:.04em; text-transform:uppercase;
-    padding:7px 14px; border-radius:5px; border:1px solid var(--line); color:var(--grey); cursor:pointer; background:transparent;
-    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  @media (max-width:760px){
+    .newsletter-visual{ width:min(34vw,150px); margin:0 auto; }
   }
-  .toggle-btn:hover{ border-color:var(--grey); color:var(--chrome); }
-  .toggle-btn.active{ color:var(--void); background:var(--amber); border-color:var(--amber); box-shadow:0 0 14px rgba(255,183,3,.4); }
-  .data-note{ font-size:11px; color:var(--grey-dim); margin-top:16px; font-family:'Poppins',sans-serif; }
+  .newsletter-flag{ width:42%; height:auto; }
+  .newsletter-heading{ font-size:clamp(22px,3vw,28px); margin-bottom:10px; }
+  .newsletter-copy{ color:var(--grey); font-size:15px; line-height:1.6; margin-bottom:24px; max-width:460px; }
+  @media (max-width:760px){ .newsletter-copy{ margin-left:auto; margin-right:auto; } }
+  .newsletter-field{
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  @media (max-width:760px){ .newsletter-field{ justify-content:center; } }
+  .newsletter-field input{
+    flex:1 1 240px;
+    min-width:0;
+    padding:13px 18px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,.25);
+    color:var(--chrome);
+    font-family:'Poppins',sans-serif;
+    font-size:14px;
+  }
+  .newsletter-field input::placeholder{ color:var(--grey-dim); }
+  .newsletter-field input:focus{ outline:none; border-color:var(--red); box-shadow:0 0 0 3px rgba(226,28,33,.15); }
+  .newsletter-field .btn{ flex:0 0 auto; }
+  .newsletter-status{
+    margin-top:14px; font-size:13px; min-height:18px;
+    color:var(--grey);
+  }
+  .newsletter-status.ok{ color:var(--amber); }
+  .newsletter-status.error{ color:var(--red); }
 
   /* ============ ABOUT (Sector 3) ============ */
   .about-grid{ margin-top:48px; display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; position:relative; }
@@ -526,12 +557,21 @@
     color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.06);
     letter-spacing:.02em; white-space:nowrap; z-index:0; pointer-events:none; user-select:none;
   }
+  @media (max-width:600px){
+    .about-watermark{ font-size:15vw; -webkit-text-stroke:1px rgba(255,255,255,.05); }
+  }
   .about-text{ position:relative; z-index:1; }
   .about-text p{ color:var(--grey); line-height:1.75; font-size:16px; margin-bottom:16px; }
   .about-text strong{ color:var(--chrome); }
-  .stat-row{ display:flex; gap:34px; margin-top:30px; flex-wrap:wrap; }
-  .stat b{ font-family:'Poppins',sans-serif; font-size:32px; color:var(--red); display:block; text-shadow:0 0 18px rgba(226,28,33,.35); }
-  .stat span{ font-size:12px; color:var(--grey); letter-spacing:.08em; text-transform:uppercase; }
+  .stat-row{ display:flex; justify-content:center; gap:22px; margin-top:30px; flex-wrap:nowrap; }
+  .stat{ text-align:center; }
+  .stat b{ font-family:'Poppins',sans-serif; font-size:34px; color:var(--red); display:block; text-shadow:0 0 18px rgba(226,28,33,.35); white-space:nowrap; }
+  .stat span{ font-size:11px; color:var(--grey); letter-spacing:.06em; text-transform:uppercase; white-space:nowrap; }
+  @media (max-width:480px){
+    .stat-row{ gap:14px; }
+    .stat b{ font-size:26px; }
+    .stat span{ font-size:9px; letter-spacing:.03em; }
+  }
   .about-visual{
     position:relative; z-index:1;
     aspect-ratio:1/1; border-radius:var(--radius); border:1px solid var(--line);
@@ -569,7 +609,7 @@
     margin-top:50px;
     display:grid; grid-template-columns:repeat(2,1fr); gap:16px;
   }
-  @media (max-width:600px){ .link-grid{ grid-template-columns:1fr; } }
+  @media (max-width:480px){ .link-grid{ gap:10px; } }
   .link-card{
     position:relative;
     display:flex; align-items:center; justify-content:space-between;
@@ -597,6 +637,15 @@
   .link-sub{ font-size:12px; color:var(--grey); margin-top:2px; }
   .link-arrow{ color:var(--grey); font-size:18px; transition:transform .2s ease, color .2s ease; }
   .link-card:hover .link-arrow{ transform:translateX(4px); color:var(--red); }
+  @media (max-width:480px){
+    .link-card{ padding:14px; }
+    .link-left{ gap:10px; }
+    .link-icon{ width:32px; height:32px; border-radius:6px; }
+    .link-icon svg{ width:15px; height:15px; }
+    .link-name{ font-size:12px; letter-spacing:.01em; }
+    .link-sub{ display:none; }
+    .link-arrow{ display:none; }
+  }
 
   /* ============ FOOTER ============ */
   footer{
@@ -606,6 +655,9 @@
   }
   footer .brand{ font-size:16px; }
   footer p{ color:var(--grey-dim); font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:.05em; }
+  @media (max-width:520px){
+    footer{ flex-direction:column; text-align:center; padding:40px 6vw 32px; }
+  }
 </style>
 </head>
 <body>
@@ -632,10 +684,22 @@
       <li><a href="#contenido">Contenido</a></li>
       <li><a href="#pitlane">Síguenos</a></li>
       <li><a href="#sobre">Sobre</a></li>
-      <li><a href="#crono">Cronómetro</a></li>
+      <li><a href="#newsletter">Newsletter</a></li>
     </ul>
   </nav>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+
+<div class="mobile-nav" id="mobile-nav">
+  <ul>
+    <li><a href="#contenido">Contenido</a></li>
+    <li><a href="#pitlane">Síguenos</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#newsletter">Newsletter</a></li>
+  </ul>
+</div>
 
 <!-- ============ HERO ============ -->
 <section class="hero" style="padding-left:0;padding-right:0;max-width:none;">
@@ -793,6 +857,28 @@
       </div>
       <span class="link-arrow">→</span>
     </a>
+
+    <a class="link-card reveal" href="https://www.instagram.com/paddockdaily/" target="_blank" rel="noopener">
+      <div class="link-left">
+        <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M12 2c-2.7 0-3.05.01-4.12.06-1.06.05-1.79.22-2.43.47a4.9 4.9 0 0 0-1.77 1.15A4.9 4.9 0 0 0 2.53 5.45c-.25.64-.42 1.37-.47 2.43C2.01 8.95 2 9.3 2 12s.01 3.05.06 4.12c.05 1.06.22 1.79.47 2.43a4.9 4.9 0 0 0 1.15 1.77 4.9 4.9 0 0 0 1.77 1.15c.64.25 1.37.42 2.43.47C8.95 21.99 9.3 22 12 22s3.05-.01 4.12-.06c1.06-.05 1.79-.22 2.43-.47a4.9 4.9 0 0 0 1.77-1.15 4.9 4.9 0 0 0 1.15-1.77c.25-.64.42-1.37.47-2.43.05-1.07.06-1.42.06-4.12s-.01-3.05-.06-4.12c-.05-1.06-.22-1.79-.47-2.43a4.9 4.9 0 0 0-1.15-1.77A4.9 4.9 0 0 0 18.55 2.53c-.64-.25-1.37-.42-2.43-.47C15.05 2.01 14.7 2 12 2zm0 1.8c2.65 0 2.97.01 4.02.06.97.04 1.5.2 1.85.34.46.18.8.4 1.15.75.35.35.57.69.75 1.15.14.35.3.88.34 1.85.05 1.05.06 1.37.06 4.02s-.01 2.97-.06 4.02c-.04.97-.2 1.5-.34 1.85-.18.46-.4.8-.75 1.15-.35.35-.69.57-1.15.75-.35.14-.88.3-1.85.34-1.05.05-1.37.06-4.02.06s-2.97-.01-4.02-.06c-.97-.04-1.5-.2-1.85-.34a3.1 3.1 0 0 1-1.15-.75 3.1 3.1 0 0 1-.75-1.15c-.14-.35-.3-.88-.34-1.85-.05-1.05-.06-1.37-.06-4.02s.01-2.97.06-4.02c.04-.97.2-1.5.34-1.85.18-.46.4-.8.75-1.15.35-.35.69-.57 1.15-.75.35-.14.88-.3 1.85-.34C9.03 3.81 9.35 3.8 12 3.8zm0 3.06a5.14 5.14 0 1 0 0 10.28 5.14 5.14 0 0 0 0-10.28zm0 8.48a3.34 3.34 0 1 1 0-6.68 3.34 3.34 0 0 1 0 6.68zm6.54-8.68a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg></span>
+        <div>
+          <div class="link-name">Paddock Daily</div>
+          <div class="link-sub">@paddockdaily</div>
+        </div>
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a class="link-card reveal" href="mailto:pitwall2023@gmail.com">
+      <div class="link-left">
+        <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg></span>
+        <div>
+          <div class="link-name">Contacto</div>
+          <div class="link-sub">pitwall2023@gmail.com</div>
+        </div>
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
   </div>
 </section>
 
@@ -831,47 +917,37 @@
 
 <div class="seam seam--flip"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
 
-<!-- ============ SECTOR 2 — CRONO ============ -->
-<section id="crono">
+<!-- ============ SECTOR 2 — NEWSLETTER ============ -->
+<section id="newsletter">
   <div class="reveal">
-    <div class="eyebrow"><span class="mini-lights"><span></span><span></span><span></span></span>Sector 3 // Crono</div>
-    <h2 class="section-title">Torre de cronometraje</h2>
-    <p class="section-sub">Datos en vivo del Mundial: cuenta atrás al próximo Gran Premio y la clasificación actual.</p>
+    <div class="eyebrow"><span class="mini-lights"><span></span><span></span><span></span></span>Sector 3 // Newsletter</div>
+    <h2 class="section-title">No te pierdas ni un Gran Premio</h2>
+    <p class="section-sub">Cada semana, directo a tu correo: resumen del fin de semana de carreras, curiosidades y lo que se cuece en el paddock antes de que lo veas en ningún sitio.</p>
   </div>
 
-  <div class="tower-wrap">
-    <div class="panel reveal">
-      <div class="panel-head">
-        <h3>PRÓXIMA CITA</h3>
-        <span class="live-dot">EN VIVO</span>
-      </div>
-      <div class="race-name" id="race-name">Cargando calendario…</div>
-      <div class="race-loc" id="race-loc">&nbsp;</div>
-      <div class="countdown" id="countdown">
-        <div class="cd-unit"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Días</div></div>
-        <div class="cd-unit"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Horas</div></div>
-        <div class="cd-unit"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Min</div></div>
-        <div class="cd-unit"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seg</div></div>
-      </div>
-
-      <div class="session-block">
-        <div class="session-block-title">Horario del fin de semana <span>hora local</span></div>
-        <div class="session-list" id="session-list"></div>
-      </div>
+  <div class="newsletter-panel panel reveal">
+    <div class="newsletter-visual">
+      <svg class="newsletter-flag" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <pattern id="newsletterChecker" width="12" height="12" patternUnits="userSpaceOnUse">
+            <rect width="6" height="6" fill="#f2f1ed"/>
+            <rect x="6" y="6" width="6" height="6" fill="#f2f1ed"/>
+          </pattern>
+        </defs>
+        <rect x="22" y="8" width="3" height="48" rx="1.5" fill="#f2f1ed"/>
+        <rect x="25" y="10" width="30" height="20" fill="url(#newsletterChecker)"/>
+      </svg>
     </div>
-
-    <div class="panel reveal">
-      <div class="panel-head">
-        <h3 id="standings-title">CLASIFICACIÓN — PILOTOS</h3>
-      </div>
-      <div class="toggle-row">
-        <button class="toggle-btn active" id="tab-drivers">Pilotos</button>
-        <button class="toggle-btn" id="tab-teams">Constructores</button>
-      </div>
-      <div class="standings-list" id="standings-list">
-        <div class="standing-row"><span class="pos">—</span><span class="std-name">Cargando datos…</span><span></span></div>
-      </div>
-      <div class="data-note">Fuente: Jolpica F1 API</div>
+    <div class="newsletter-body">
+      <h3 class="newsletter-heading">Únete al box de Pitwall</h3>
+      <p class="newsletter-copy">Sin spam, sin relleno — solo lo esencial de la F1 y el motorsport, directo de quien lo vive al límite.</p>
+      <form id="newsletter-form" novalidate>
+        <div class="newsletter-field">
+          <input type="email" id="newsletter-email" name="email" placeholder="tucorreo@ejemplo.com" required autocomplete="email">
+          <button type="submit" class="btn btn-primary">Unirme</button>
+        </div>
+        <p class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </div>
 </section>
@@ -954,6 +1030,31 @@
       var y = (ev.clientY - rect.top) / rect.height - 0.5;
       pGrid.style.transform = 'translate(' + (x * 14) + 'px,' + (y * 14) + 'px)';
       pLines.style.transform = 'translate(' + (x * -22) + 'px,' + (y * -22) + 'px)';
+    });
+  }
+
+  /* ---------- MOBILE NAV ---------- */
+  var navToggle = document.getElementById('nav-toggle');
+  var mobileNav = document.getElementById('mobile-nav');
+  if(navToggle && mobileNav){
+    function closeMobileNav(){
+      navToggle.classList.remove('open');
+      mobileNav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    navToggle.addEventListener('click', function(){
+      var isOpen = !mobileNav.classList.contains('open');
+      navToggle.classList.toggle('open', isOpen);
+      mobileNav.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    mobileNav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeMobileNav);
+    });
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 760) closeMobileNav();
     });
   }
 
@@ -1079,10 +1180,6 @@
     revealEls.forEach(function(el){ el.classList.add('in'); });
   }
 
-  /* ---------- COUNTDOWN + STANDINGS (Jolpica / Ergast-compatible API) ---------- */
-  var API = 'https://api.jolpi.ca/ergast/f1';
-  var countdownTimer = null;
-
   function fetchJSON(url){
     return fetch(url).then(function(r){
       if(!r.ok) throw new Error('bad response');
@@ -1090,149 +1187,53 @@
     });
   }
 
-  function startCountdown(dateISO){
-    var target = new Date(dateISO).getTime();
-    function tick(){
-      var diff = target - Date.now();
-      if(diff < 0) diff = 0;
-      var d = Math.floor(diff / 86400000);
-      var h = Math.floor((diff % 86400000) / 3600000);
-      var m = Math.floor((diff % 3600000) / 60000);
-      var s = Math.floor((diff % 60000) / 1000);
-      document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
-      document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
-      document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
-      document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
-    }
-    tick();
-    countdownTimer = setInterval(tick, 1000);
-  }
+  /* ---------- NEWSLETTER FORM ----------
+     Set NEWSLETTER_ENDPOINT to the URL the form should submit to
+     (e.g. an n8n webhook, Mailchimp/Brevo endpoint, etc). Left empty,
+     the form just shows a friendly placeholder message on submit. */
+  var NEWSLETTER_ENDPOINT = '';
 
-  function formatSessionDay(iso){
-    try{
-      return new Date(iso).toLocaleDateString('es-ES', { weekday:'short', day:'2-digit', month:'short' });
-    } catch(e){ return ''; }
-  }
-  function formatSessionTime(iso){
-    try{
-      return new Date(iso).toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
-    } catch(e){ return '--:--'; }
-  }
+  var newsletterForm = document.getElementById('newsletter-form');
+  if(newsletterForm){
+    newsletterForm.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var emailInput = document.getElementById('newsletter-email');
+      var status = document.getElementById('newsletter-status');
+      var email = emailInput.value.trim();
+      var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  function renderSessions(race){
-    var list = document.getElementById('session-list');
-    if(!list) return;
-    var sessions = [];
-    var map = [
-      ['FirstPractice', 'Libres 1'],
-      ['SecondPractice', 'Libres 2'],
-      ['ThirdPractice', 'Libres 3'],
-      ['SprintQualifying', 'Clasif. Sprint'],
-      ['Sprint', 'Sprint'],
-      ['Qualifying', 'Clasificación']
-    ];
-    map.forEach(function(pair){
-      var key = pair[0], label = pair[1];
-      if(race[key] && race[key].date){
-        sessions.push({ label: label, iso: race[key].date + 'T' + (race[key].time || '00:00:00Z'), isRace:false });
+      if(!emailOk){
+        status.textContent = 'Introduce un correo válido.';
+        status.className = 'newsletter-status error';
+        return;
       }
-    });
-    sessions.push({ label:'Carrera', iso: race.date + 'T' + (race.time || '00:00:00Z'), isRace:true });
-    sessions.sort(function(a,b){ return new Date(a.iso) - new Date(b.iso); });
 
-    list.innerHTML = '';
-    sessions.forEach(function(s){
-      var row = document.createElement('div');
-      row.className = 'session-row' + (s.isRace ? ' is-race' : '');
-      row.innerHTML =
-        '<span class="session-name">' + s.label + '</span>' +
-        '<span class="session-day">' + formatSessionDay(s.iso) + '</span>' +
-        '<span class="session-time">' + formatSessionTime(s.iso) + '</span>';
-      list.appendChild(row);
-    });
-  }
+      if(!NEWSLETTER_ENDPOINT){
+        status.textContent = 'Formulario listo — falta conectar el destino del envío.';
+        status.className = 'newsletter-status';
+        return;
+      }
 
-  function loadNextRace(){
-    fetchJSON(API + '/current/next.json')
-      .then(function(data){
-        var race = data.MRData.RaceTable.Races[0];
-        if(!race){ throw new Error('no race'); }
-        document.getElementById('race-name').textContent = race.raceName;
-        document.getElementById('race-loc').textContent = race.Circuit.circuitName + ' — ' + race.Circuit.Location.locality + ', ' + race.Circuit.Location.country;
-        var iso = race.date + 'T' + (race.time || '00:00:00Z');
-        startCountdown(iso);
-        renderSessions(race);
+      status.textContent = 'Enviando…';
+      status.className = 'newsletter-status';
+
+      fetch(NEWSLETTER_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(r){
+        if(!r.ok) throw new Error('bad response');
+        status.textContent = '¡Listo! Ya estás dentro.';
+        status.className = 'newsletter-status ok';
+        newsletterForm.reset();
       })
       .catch(function(){
-        document.getElementById('race-name').textContent = 'Calendario no disponible';
-        document.getElementById('race-loc').textContent = 'Vuelve a intentarlo más tarde';
+        status.textContent = 'No se ha podido enviar. Inténtalo de nuevo en un momento.';
+        status.className = 'newsletter-status error';
       });
-  }
-
-  function renderStandings(rows){
-    var list = document.getElementById('standings-list');
-    list.innerHTML = '';
-    rows.forEach(function(row){
-      var el = document.createElement('div');
-      el.className = 'standing-row';
-      el.innerHTML =
-        '<span class="pos">' + row.pos + '</span>' +
-        '<span><span class="std-name">' + row.name + '</span><br><span class="std-team">' + row.team + '</span></span>' +
-        '<span class="std-pts">' + row.pts + ' pts</span>';
-      list.appendChild(el);
     });
   }
-
-  function loadDriverStandings(){
-    fetchJSON(API + '/current/driverStandings.json')
-      .then(function(data){
-        var list = data.MRData.StandingsTable.StandingsLists[0];
-        if(!list){ throw new Error('no standings'); }
-        var rows = list.DriverStandings.slice(0,5).map(function(d){
-          return {
-            pos: d.position,
-            name: d.Driver.givenName + ' ' + d.Driver.familyName,
-            team: d.Constructors[0] ? d.Constructors[0].name : '',
-            pts: d.points
-          };
-        });
-        renderStandings(rows);
-      })
-      .catch(function(){
-        renderStandings([{pos:'—', name:'Datos no disponibles ahora mismo', team:'', pts:'—'}]);
-      });
-  }
-
-  function loadConstructorStandings(){
-    fetchJSON(API + '/current/constructorStandings.json')
-      .then(function(data){
-        var list = data.MRData.StandingsTable.StandingsLists[0];
-        if(!list){ throw new Error('no standings'); }
-        var rows = list.ConstructorStandings.slice(0,5).map(function(c){
-          return { pos: c.position, name: c.Constructor.name, team: c.Constructor.nationality, pts: c.points };
-        });
-        renderStandings(rows);
-      })
-      .catch(function(){
-        renderStandings([{pos:'—', name:'Datos no disponibles ahora mismo', team:'', pts:'—'}]);
-      });
-  }
-
-  document.getElementById('tab-drivers').addEventListener('click', function(){
-    this.classList.add('active');
-    document.getElementById('tab-teams').classList.remove('active');
-    document.getElementById('standings-title').textContent = 'CLASIFICACIÓN — PILOTOS';
-    loadDriverStandings();
-  });
-  document.getElementById('tab-teams').addEventListener('click', function(){
-    this.classList.add('active');
-    document.getElementById('tab-drivers').classList.remove('active');
-    document.getElementById('standings-title').textContent = 'CLASIFICACIÓN — CONSTRUCTORES';
-    loadConstructorStandings();
-  });
-
-  loadNextRace();
-  loadDriverStandings();
 
 })();
 </script>
