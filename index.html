@@ -418,7 +418,10 @@
     gap:18px;
   }
   @media (max-width:900px){ .content-grid{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:480px){ .content-grid{ gap:10px; } }
+  @media (max-width:600px){
+    .content-grid{ grid-template-columns:1fr; gap:14px; }
+    .content-grid > .clip:nth-child(n+4){ display:none; }
+  }
 
   .clip{
     position:relative;
@@ -478,6 +481,88 @@
   }
 
   .content-more{ margin-top:34px; text-align:center; }
+
+  /* ============ REEL PLAYER MODAL ============ */
+  .reel-modal{
+    position:fixed; inset:0; z-index:900;
+    background:rgba(6,6,8,.92);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    opacity:0; visibility:hidden;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  .reel-modal.open{ opacity:1; visibility:visible; }
+  .reel-modal-inner{
+    position:relative;
+    width:100%; max-width:420px; max-height:90vh;
+    overflow-y:auto; overflow-x:hidden;
+    border-radius:calc(var(--radius) + 4px);
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line);
+    box-shadow:0 0 0 1px rgba(226,28,33,.25), 0 30px 70px rgba(0,0,0,.55), 0 0 40px rgba(226,28,33,.12);
+    transform:translateY(16px) scale(.98);
+    transition:transform .25s ease;
+  }
+  .reel-modal.open .reel-modal-inner{ transform:translateY(0) scale(1); }
+  .reel-modal-inner::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:2px; z-index:2;
+    background:linear-gradient(90deg, transparent, var(--red), var(--amber), var(--red), transparent);
+  }
+  .reel-modal-close{
+    position:absolute; top:-44px; right:0;
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(20,20,24,.9); border:1px solid var(--line);
+    color:var(--chrome); font-size:20px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:border-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .reel-modal-close:hover{ border-color:var(--red); color:var(--red); transform:rotate(90deg); }
+  .reel-modal-loading{
+    padding:60px 20px; text-align:center; color:var(--grey);
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.1em;
+  }
+  .reel-modal-loading::before{
+    content:""; display:block; width:22px; height:22px; margin:0 auto 14px;
+    border-radius:50%; border:2px solid var(--line); border-top-color:var(--red);
+    animation:reel-spin .8s linear infinite;
+  }
+  @keyframes reel-spin{ to{ transform:rotate(360deg); } }
+  .reel-video{
+    display:block; width:100%; max-height:75vh;
+    background:#000;
+    border-top-left-radius:calc(var(--radius) + 3px);
+    border-top-right-radius:calc(var(--radius) + 3px);
+  }
+  /* best-effort tinting of native controls on Chromium/Safari; no-op elsewhere */
+  .reel-video::-webkit-media-controls-panel{
+    background-image:linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.75));
+  }
+  .reel-video::-webkit-media-controls-play-button,
+  .reel-video::-webkit-media-controls-mute-button{
+    filter:drop-shadow(0 0 3px rgba(226,28,33,.6));
+  }
+  .reel-video::-webkit-media-controls-current-time-display,
+  .reel-video::-webkit-media-controls-time-remaining-display{
+    color:#f2f1ed;
+  }
+  .reel-video-wrap{ position:relative; }
+  .reel-video-kicker{
+    position:absolute; top:12px; left:12px; z-index:2;
+    display:flex; align-items:center; gap:6px;
+    font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.15em; color:var(--red);
+    background:rgba(10,10,12,.6); padding:4px 8px; border-radius:4px;
+    border:1px solid rgba(226,28,33,.35);
+    pointer-events:none;
+  }
+  .reel-video-kicker::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--red); box-shadow:0 0 6px var(--red); animation:blink 1.3s infinite; }
+  .reel-video-caption{
+    padding:16px 18px 18px;
+    font-family:'Poppins',sans-serif;
+    font-weight:600;
+    font-size:15px; color:var(--chrome); line-height:1.5;
+    border-top:1px solid var(--line);
+  }
 
   /* ============ NEWSLETTER (Sector 2) ============ */
   .panel{
@@ -663,6 +748,15 @@
 <body>
 
 <div id="scroll-progress"></div>
+
+<div class="reel-modal" id="reel-modal" aria-hidden="true">
+  <div class="reel-modal-inner">
+    <button class="reel-modal-close" id="reel-modal-close" aria-label="Cerrar">×</button>
+    <div id="reel-embed-target">
+      <div class="reel-modal-loading">CARGANDO REEL…</div>
+    </div>
+  </div>
+</div>
 
 <!-- ============ LOADER ============ -->
 <div id="loader" aria-hidden="true">
@@ -1058,6 +1152,115 @@
     });
   }
 
+  /* ---------- REEL PLAYER MODAL (native <video>, Instagram embed as fallback) ---------- */
+  var reelModal = document.getElementById('reel-modal');
+  var reelEmbedTarget = document.getElementById('reel-embed-target');
+  var reelModalClose = document.getElementById('reel-modal-close');
+  var instagramScriptLoaded = false;
+  var instagramScriptLoading = false;
+
+  /* Set this to the "Pitwall: Reel Video URL" webhook to fetch a fresh,
+     not-yet-expired direct video link at click time. Left empty, cards
+     always fall back to the Instagram embed instead. */
+  var VIDEO_URL_ENDPOINT = 'https://n8n.froddes.com/webhook/pitwall-reel-video';
+
+  function isInstagramPostUrl(url){
+    return /instagram\.com\/(reel|p|tv)\//.test(url || '');
+  }
+
+  function loadInstagramEmbedScript(callback){
+    if(instagramScriptLoaded){ callback(); return; }
+    if(instagramScriptLoading){
+      var check = setInterval(function(){
+        if(instagramScriptLoaded){ clearInterval(check); callback(); }
+      }, 100);
+      return;
+    }
+    instagramScriptLoading = true;
+    var script = document.createElement('script');
+    script.src = 'https://www.instagram.com/embed.js';
+    script.async = true;
+    script.onload = function(){
+      instagramScriptLoaded = true;
+      instagramScriptLoading = false;
+      callback();
+    };
+    document.body.appendChild(script);
+  }
+
+  function showInstagramEmbedFallback(url){
+    loadInstagramEmbedScript(function(){
+      reelEmbedTarget.innerHTML =
+        '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14" style="margin:0; width:100%;"></blockquote>';
+      if(window.instgrm && window.instgrm.Embeds){
+        window.instgrm.Embeds.process();
+      }
+    });
+  }
+
+  function showNativeVideo(mediaUrl, caption){
+    var safeCaption = caption ? caption.replace(/</g, '&lt;') : '';
+    reelEmbedTarget.innerHTML =
+      '<div class="reel-video-wrap">' +
+        '<span class="reel-video-kicker">REEL</span>' +
+        '<video class="reel-video" src="' + mediaUrl + '" controls autoplay playsinline></video>' +
+      '</div>' +
+      (safeCaption ? '<div class="reel-video-caption">' + safeCaption + '</div>' : '');
+  }
+
+  function openReelModal(card){
+    var url = card.getAttribute('href');
+    var mediaId = card.dataset.mediaId;
+    var caption = card.dataset.caption;
+
+    reelEmbedTarget.innerHTML = '<div class="reel-modal-loading">CARGANDO REEL…</div>';
+    reelModal.classList.add('open');
+    reelModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    if(VIDEO_URL_ENDPOINT && mediaId){
+      fetchJSON(VIDEO_URL_ENDPOINT + '?id=' + encodeURIComponent(mediaId))
+        .then(function(data){
+          if(data && data.media_url){
+            showNativeVideo(data.media_url, caption);
+          } else {
+            showInstagramEmbedFallback(url);
+          }
+        })
+        .catch(function(){ showInstagramEmbedFallback(url); });
+    } else {
+      showInstagramEmbedFallback(url);
+    }
+  }
+
+  function closeReelModal(){
+    reelModal.classList.remove('open');
+    reelModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    setTimeout(function(){ reelEmbedTarget.innerHTML = ''; }, 250);
+  }
+
+  if(reelModal){
+    document.addEventListener('click', function(ev){
+      var card = ev.target.closest('.clip');
+      if(!card) return;
+      var url = card.getAttribute('href');
+      if(isInstagramPostUrl(url)){
+        ev.preventDefault();
+        openReelModal(card);
+      }
+      /* otherwise (e.g. fallback link to the profile) let it navigate normally */
+    });
+
+    reelModalClose.addEventListener('click', closeReelModal);
+    reelModal.addEventListener('click', function(ev){
+      if(ev.target === reelModal) closeReelModal();
+    });
+    document.addEventListener('keydown', function(ev){
+      if(ev.key === 'Escape' && reelModal.classList.contains('open')) closeReelModal();
+    });
+  }
+
   /* ---------- SCROLL PROGRESS + NAV STATE ---------- */
   var progressBar = document.getElementById('scroll-progress');
   var headerEl = document.querySelector('header');
@@ -1099,18 +1302,21 @@
      is a natural fit here since new-reel detection needs polling or a webhook on
      Instagram's side, which a static HTML file can't do by itself.
      Left empty, the page keeps the static cards already in the HTML. */
-  var REELS_FEED_URL = '';
+  var REELS_FEED_URL = 'https://n8n.froddes.com/webhook/pitwall-reels';
 
   function renderReels(items){
     var grid = document.getElementById('content-grid');
     if(!grid || !items || !items.length) return;
     grid.innerHTML = '';
-    items.slice(0,6).forEach(function(item){
+    var maxReels = window.innerWidth <= 600 ? 3 : 6;
+    items.slice(0, maxReels).forEach(function(item){
       var a = document.createElement('a');
       a.className = 'clip reveal in';
       a.href = item.url || 'https://www.instagram.com/pitwall_es/';
       a.target = '_blank';
       a.rel = 'noopener';
+      if(item.ig_media_id){ a.dataset.mediaId = item.ig_media_id; }
+      if(item.caption){ a.dataset.caption = item.caption; }
       if(item.thumbnail){
         a.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0) 40%, rgba(0,0,0,.85) 100%), url("' + item.thumbnail + '")';
         a.style.backgroundSize = 'cover';
@@ -1234,7 +1440,6 @@
       });
     });
   }
-
 })();
 </script>
 </body>
