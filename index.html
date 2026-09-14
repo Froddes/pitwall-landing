@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pitwall — F1 & Motorsport</title>
+<meta name="description" content="Noticias, curiosidades y la pasión por el motorsport contadas al límite. Reels, historias y el mejor contenido de Fórmula 1, directo de Pitwall.">
+<link rel="canonical" href="https://pitwall.blog/">
+
+<!-- Open Graph (WhatsApp, Facebook, LinkedIn...) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pitwall.blog/">
+<meta property="og:title" content="Pitwall — F1 & Motorsport">
+<meta property="og:description" content="Noticias, curiosidades y la pasión por el motorsport contadas al límite. Reels, historias y el mejor contenido de Fórmula 1, directo de Pitwall.">
+<meta property="og:image" content="https://pitwall.blog/public/pitwall-logo.png">
+<meta property="og:locale" content="es_ES">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pitwall — F1 & Motorsport">
+<meta name="twitter:description" content="Noticias, curiosidades y la pasión por el motorsport contadas al límite.">
+<meta name="twitter:image" content="https://pitwall.blog/public/pitwall-logo.png">
+
 <link rel="icon" type="image/png" href="./public/pitwall-logo.png">
 <link rel="apple-touch-icon" href="./public/pitwall-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -785,9 +802,9 @@
   <nav>
     <ul>
       <li><a href="#contenido">Contenido</a></li>
-      <li><a href="#pitlane">Síguenos</a></li>
-      <li><a href="#sobre">Sobre</a></li>
       <li><a href="#newsletter">Newsletter</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#pitlane">Síguenos</a></li>
     </ul>
   </nav>
   <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav">
@@ -798,9 +815,9 @@
 <div class="mobile-nav" id="mobile-nav">
   <ul>
     <li><a href="#contenido">Contenido</a></li>
-    <li><a href="#pitlane">Síguenos</a></li>
-    <li><a href="#sobre">Sobre</a></li>
     <li><a href="#newsletter">Newsletter</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#pitlane">Síguenos</a></li>
   </ul>
 </div>
 
@@ -908,6 +925,76 @@
 
 <div class="seam"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
 
+<!-- ============ SECTOR 2 — NEWSLETTER ============ -->
+<section id="newsletter">
+  <div class="reveal">
+    <div class="eyebrow"><span class="mini-lights"><span></span><span></span><span></span></span>Sector 2 // Newsletter</div>
+    <h2 class="section-title">No te pierdas ni un Gran Premio</h2>
+    <p class="section-sub">Cada semana, directo a tu correo: resumen del fin de semana de carreras, curiosidades y lo que se cuece en el paddock antes de que lo veas en ningún sitio.</p>
+  </div>
+
+  <div class="newsletter-panel panel reveal">
+    <div class="newsletter-visual">
+      <svg class="newsletter-flag" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <pattern id="newsletterChecker" width="12" height="12" patternUnits="userSpaceOnUse">
+            <rect width="6" height="6" fill="#f2f1ed"/>
+            <rect x="6" y="6" width="6" height="6" fill="#f2f1ed"/>
+          </pattern>
+        </defs>
+        <rect x="22" y="8" width="3" height="48" rx="1.5" fill="#f2f1ed"/>
+        <rect x="25" y="10" width="30" height="20" fill="url(#newsletterChecker)"/>
+      </svg>
+    </div>
+    <div class="newsletter-body">
+      <h3 class="newsletter-heading">Únete al box de Pitwall</h3>
+      <p class="newsletter-copy">Sin spam, sin relleno — solo lo esencial de la F1 y el motorsport, directo de quien lo vive al límite.</p>
+      <form id="newsletter-form" novalidate>
+        <div class="newsletter-field">
+          <input type="email" id="newsletter-email" name="email" placeholder="tucorreo@ejemplo.com" required autocomplete="email">
+          <button type="submit" class="btn btn-primary">Unirme</button>
+        </div>
+        <p class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTOR 3 — SOBRE ============ -->
+<section id="sobre">
+  <div class="about-grid">
+    <div class="about-watermark">PITWALL</div>
+    <div class="about-text reveal">
+      <div class="eyebrow"><span class="mini-lights"><span></span><span></span><span></span></span>Sector 3 // Box</div>
+      <h2 class="section-title">Sobre Pitwall</h2>
+      <p>Pitwall nació de una obsesión sencilla: <strong>el motorsport no es solo velocidad, es una forma de sentir</strong>. Cada domingo de carrera es una historia distinta, y nosotros la contamos.</p>
+      <p>Desde noticias del paddock hasta curiosidades que nadie te ha contado, este es el sitio para quien vive la F1 más allá de los 90 minutos de carrera.</p>
+      <div class="stat-row">
+        <div class="stat"><b>270+</b><span>Publicaciones</span></div>
+        <div class="stat"><b>10K+</b><span>Comunidad IG</span></div>
+        <div class="stat"><b>126K+</b><span>Me gusta en TikTok</span></div>
+      </div>
+    </div>
+    <div class="about-visual reveal" id="about-visual">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <svg class="gauge" viewBox="0 0 180 180">
+        <defs>
+          <linearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e21c21"/>
+            <stop offset="100%" stop-color="#ffb703"/>
+          </linearGradient>
+        </defs>
+        <circle class="track" cx="90" cy="90" r="75"></circle>
+        <circle class="fill" cx="90" cy="90" r="75" transform="rotate(-90 90 90)"></circle>
+      </svg>
+      <div class="gauge-label"><b>🏁</b><span>PASIÓN 100%</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="seam seam--flip"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
+
 <!-- ============ PIT LANE — ENLACES ============ -->
 <section id="pitlane">
   <div class="reveal">
@@ -982,76 +1069,6 @@
       </div>
       <span class="link-arrow">→</span>
     </a>
-  </div>
-</section>
-
-<!-- ============ SECTOR 3 — SOBRE ============ -->
-<section id="sobre">
-  <div class="about-grid">
-    <div class="about-watermark">PITWALL</div>
-    <div class="about-text reveal">
-      <div class="eyebrow"><span class="mini-lights"><span></span><span></span><span></span></span>Sector 2 // Box</div>
-      <h2 class="section-title">Sobre Pitwall</h2>
-      <p>Pitwall nació de una obsesión sencilla: <strong>el motorsport no es solo velocidad, es una forma de sentir</strong>. Cada domingo de carrera es una historia distinta, y nosotros la contamos.</p>
-      <p>Desde noticias del paddock hasta curiosidades que nadie te ha contado, este es el sitio para quien vive la F1 más allá de los 90 minutos de carrera.</p>
-      <div class="stat-row">
-        <div class="stat"><b>270+</b><span>Publicaciones</span></div>
-        <div class="stat"><b>10K+</b><span>Comunidad IG</span></div>
-        <div class="stat"><b>126K+</b><span>Me gusta en TikTok</span></div>
-      </div>
-    </div>
-    <div class="about-visual reveal" id="about-visual">
-      <div class="ring r1"></div>
-      <div class="ring r2"></div>
-      <svg class="gauge" viewBox="0 0 180 180">
-        <defs>
-          <linearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#e21c21"/>
-            <stop offset="100%" stop-color="#ffb703"/>
-          </linearGradient>
-        </defs>
-        <circle class="track" cx="90" cy="90" r="75"></circle>
-        <circle class="fill" cx="90" cy="90" r="75" transform="rotate(-90 90 90)"></circle>
-      </svg>
-      <div class="gauge-label"><b>🏁</b><span>PASIÓN 100%</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="seam seam--flip"><img src="./public/finish-line.png" alt="" loading="lazy"></div>
-
-<!-- ============ SECTOR 2 — NEWSLETTER ============ -->
-<section id="newsletter">
-  <div class="reveal">
-    <div class="eyebrow"><span class="mini-lights"><span></span><span></span><span></span></span>Sector 3 // Newsletter</div>
-    <h2 class="section-title">No te pierdas ni un Gran Premio</h2>
-    <p class="section-sub">Cada semana, directo a tu correo: resumen del fin de semana de carreras, curiosidades y lo que se cuece en el paddock antes de que lo veas en ningún sitio.</p>
-  </div>
-
-  <div class="newsletter-panel panel reveal">
-    <div class="newsletter-visual">
-      <svg class="newsletter-flag" viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <pattern id="newsletterChecker" width="12" height="12" patternUnits="userSpaceOnUse">
-            <rect width="6" height="6" fill="#f2f1ed"/>
-            <rect x="6" y="6" width="6" height="6" fill="#f2f1ed"/>
-          </pattern>
-        </defs>
-        <rect x="22" y="8" width="3" height="48" rx="1.5" fill="#f2f1ed"/>
-        <rect x="25" y="10" width="30" height="20" fill="url(#newsletterChecker)"/>
-      </svg>
-    </div>
-    <div class="newsletter-body">
-      <h3 class="newsletter-heading">Únete al box de Pitwall</h3>
-      <p class="newsletter-copy">Sin spam, sin relleno — solo lo esencial de la F1 y el motorsport, directo de quien lo vive al límite.</p>
-      <form id="newsletter-form" novalidate>
-        <div class="newsletter-field">
-          <input type="email" id="newsletter-email" name="email" placeholder="tucorreo@ejemplo.com" required autocomplete="email">
-          <button type="submit" class="btn btn-primary">Unirme</button>
-        </div>
-        <p class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></p>
-      </form>
-    </div>
   </div>
 </section>
 
@@ -1456,6 +1473,7 @@
       });
     });
   }
+
 })();
 </script>
 </body>
