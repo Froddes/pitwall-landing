@@ -7,10 +7,22 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- <url>
-    <loc>https://pitwall.blog/privacidad.html</loc>
+  <url>
+    <loc>https://pitwall.blog/politica-privacidad.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-  </url> -->
+  </url>
+
+  <url>
+    <loc>https://pitwall.blog/aviso-legal.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://pitwall.blog/politica-cookies.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 
 </urlset>
